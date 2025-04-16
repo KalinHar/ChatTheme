@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        body {
+            background-color: rgb(239, 238, 238);
+        }
+
+        .povc-feed {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 50px);
+        }
+
+        .main-view {
+            position: absolute;
+            height: 452px;
+            width: 600px;
+            top: calc(50% - 226px);
+            left: calc(50% - 300px);
+        }
+
+        .set-color-font {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+        }
+
+        @media (max-width: 1000px) {
+            .set-color-font {
+                display: none;
+            }
+
+            .main-view {
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+            }
+        }
+
+        .povc-container {
+            font-family: Arial;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            border: 5px;
+            border-color: black;
+            background-color: black;
+            box-shadow: 2px 2px 10px 2px #888888;
+            overflow: hidden;
+        }
+
+        .povc-header {
+            display: flex;
+            justify-content: space-between;
+            height: 50px;
+            background-color: black;
+            color: white;
+        }
+
+        .povc-title {
+            margin: 15px;
+            font-size: larger;
+        }
+
+        .povc-video-feed {
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+            padding: 0px !important;
+        }
+
+        .povc-video-feed-content {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+        }
+
+        .povc-video-controls {
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(110, 110, 110, 0.6);
+            position: absolute;
+            bottom: 0px;
+            border-top-left-radius: 17px;
+            border-top-right-radius: 17px;
+        }
+
+        .povc-chat-feed {
+            padding: 0px !important;
+            height: 100%;
+            background-color: #f2f2f2;
+            overflow: hidden;
+        }
+
+        .povc-chat-feed-half {
+            padding: 0px !important;
+            margin-bottom: -17px !important;
+            z-index: 2;
+            bottom: 17px;
+            background-color: #f2f2f2;
+            border-radius: 17px 17px 0px 0px;
+            overflow: hidden;
+        }
+
+        .povc-chat-controls {
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            bottom: 0px;
+            width: 100%;
+            background-color: white;
+            position: absolute;
+            border-top-left-radius: 17px;
+            border-top-right-radius: 17px;
+        }
+
+        @media (orientation: landscape) {
+            .povc-feed {
+                flex-direction: row;
+            }
+
+            .povc-video-controls {
+                height: 70px !important;
+            }
+
+            .povc-chat-feed-half {
+                margin-bottom: 0px !important;
+                bottom: 0px !important;
+                border-radius: 0px 0px 0px 0px !important;
+            }
+
+            body:has(.hidden-chat-in-video) {
+                .povc-feed {
+                    height: 100%;
+                }
+
+                .povc-header {
+                    z-index: 2;
+                    width: calc(100% - 8px);
+                    display: flex;
+                    justify-content: space-between;
+                    background-color: rgba(110, 110, 110, 0.6);
+                    position: absolute;
+                    top: 4px;
+                }
+            }
+        }
+
+        .povc-msg-vet {
+            margin: 5px;
+            justify-self: start;
+            text-align: left;
+            width: 80%;
+            background-color: white;
+            border-radius: 5px 10px 10px 0px;
+        }
+
+        .povc-msg-pet-owner {
+            margin: 5px;
+            justify-self: end;
+            text-align: right;
+            width: 80%;
+            color: white;
+            background-color: grey;
+            border-radius: 10px 10px 0px 10px;
+        }
+
+        .povc-msg-vet-time {
+            margin-left: 10px;
+            padding-top: 5px;
+            font-size: small;
+            justify-self: start;
+            width: 80%;
+        }
+
+        .povc-msg-pet-owner-time {
+            padding-top: 5px;
+            font-size: small;
+            justify-self: end;
+            width: 80%;
+        }
+
+        .povc-msg-text {
+            font-size: small;
+            padding: 5px;
+            margin-bottom: 0px;
+            word-break: break-word;
+        }
+
+        .povc-btn {
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            border: none;
+            color: white;
+            background-color: black;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: auto;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: 0.4s;
+        }
+
+        .povc-warning-mark {
+            width: 16px;
+            height: 16px;
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: auto 5px;
+            border-radius: 8px;
+        }
+
+        .povc-btn:hover {
+            box-shadow: 0px 0px 5px 3px #888888;
+        }
+
+        .povc-btn:focus {
+            outline: 0;
+        }
+
+        .povc-btn:disabled {
+            box-shadow: none;
+            cursor: default;
+            background-color: #dee2e6 !important;
+        }
+
+        .povc-btn:disabled img {
+            filter: invert(50%);
+        }
+
+        .povc-mask {
+            position: absolute;
+            z-index: 200;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .povc-modal {
+            background-color: white;
+            position: absolute;
+            width: 60%;
+            border-radius: 17px 17px 17px 17px;
+        }
+
+        @media (max-width: 440px) {
+            .povc-modal {
+                width: 90%;
+            }
+        }
+
+        .povc-modal-msg {
+            font-size: small;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .povc-modal-btn {
+            padding: 0;
+            border-radius: 17px;
+            color: white;
+            background-color: black;
+            font-size: small;
+            border: none;
+            height: 30px;
+            width: 70px;
+        }
+
+        .povc-sys-msg {
+            z-index: 2;
+            background-color: black;
+            display: inline-flex;
+            justify-content: space-between;
+            width: 100%;
+            height: fit-content;
+        }
+
+        .povc-sys-msg-content {
+            display: inline-flex;
+            width: 100%;
+        }
+
+        .povc-filter-white {
+            filter: invert(100%) sepia(79%) saturate(2%) hue-rotate(189deg) brightness(111%) contrast(101%);
+        }
+
+        .povc-filter-teal {
+            filter: invert(53%) sepia(68%) saturate(7037%) hue-rotate(162deg) brightness(99%) contrast(84%);
+        }
+
+        .povc-filter-danger {
+            filter: invert(40%) sepia(56%) saturate(5578%) hue-rotate(334deg) brightness(88%) contrast(96%);
+        }
+
+        .bottom-100 {
+            position: absolute;
+            bottom: 100px;
+            z-index: 1;
+        }
+
+        .dots-bar {
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            width: 102px;
+            height: 102px;
+        }
+
+        .grey-dot {
+            background-color: grey !important;
+        }
+
+        .dots-bar div {
+            width: 16px;
+            height: 16px;
+            background-color: black;
+            border-radius: 8px;
+            animation: dotBlink 3s infinite;
+        }
+
+        .dots-bar div:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dots-bar div:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .dots-bar div:nth-child(4) {
+            animation-delay: 0.9s;
+        }
+
+        .dots-bar div:nth-child(5) {
+            animation-delay: 1.2s;
+        }
+
+        @keyframes dotBlink {
+
+            10%,
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        .povc-btn {
+            background-color: #109526;
+        }
+    </style>
+    <div id="app">
+        <div class="main-view">
+            <div v-if="videoChatEnabled" id="videoChatContainer" class="povc-container">
+                <div class="col" style="padding: 4px !important;">
+                    <!-- header -->
+                    <div class="povc-header" id="video-chat-header">
+                        <div class="povc-title">
+                            {{ getTitle }}
+                        </div>
+                        <div style="margin: auto 4px;">
+                            <button class="povc-btn" style="background-color: #dc3545;" id="callClose"
+                                @click="closeAudioVideoChat">
+                                <img v-if="hasAudioVideo" style="width: 26px;" class="povc-filter-white"
+                                    src="./images/svg/phone-handset-down.svg" />
+                                <img v-else style="width: 20px;" class="povc-filter-white"
+                                    src="./images/svg/x-close.svg" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- close modal -->
+                    <div v-if="closeConnectionMessage" class="povc-mask">
+                        <div class="povc-modal">
+                            <div class="povc-modal-msg">
+                                {{ closeConnectionMessage }}
+                            </div>
+                            <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                                <button class="povc-modal-btn" @click="confirmClose">Yes</button>
+                                <button class="povc-modal-btn" @click="cancelClose">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- invite confirmation modal -->
+                    <div v-if="inviteMessage" class="povc-mask">
+                        <div class="povc-modal">
+                            <div class="povc-modal-msg">
+                                {{ inviteMessage }}
+                            </div>
+                            <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                                <button class="povc-modal-btn" @click="confirmInvitation">Connect</button>
+                                <button class="povc-modal-btn" @click="rejectInvitation">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- upload form -->
+                    <form method="post" style="margin-block-end: 0">
+                        <input type="file" id="filesToUpload" name="filesToUpload" style="display: none;"
+                            accept="image/*,video/*,application/pdf" multiple @change="onChangeFilesToUpload">
+                    </form>
+
+                    <div :class="!chatVisible && !audioOnly ? 'povc-feed hidden-chat-in-video' : 'povc-feed'">
+                        <!-- video & audio -->
+                        <div v-if="hasAudioVideo" id="video-feed" class="col povc-video-feed">
+                            <div v-if="audioOnly" class="povc-video-feed-content" style=" background-color: #414143;">
+                                <div id="video" class="embed-responsive-item" style="height: max-content;">
+                                    <div style="margin: 0 auto; width: 50%;">
+                                        <div style="display: flex; flex-direction: column; height: inherit;">
+                                            <img style="margin: 0 auto; width: 75%;" src="./images/svg/vet-nurse.svg" />
+                                            <img v-if="mediaStarted && chatConnected"
+                                                style="margin: 0 auto; width: 102px;" src="./images/audio-wave.gif" />
+                                            <div v-else class="dots-bar">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-show="!audioOnly" class="povc-video-feed-content">
+                                <div class="embed-responsive embed-responsive-4by3" style="height:100%">
+                                    <div id="video" ref="video" class="embed-responsive-item">
+                                    </div>
+                                </div>
+                                <div v-if="!mediaStarted" class="bottom-100">
+                                    <div class="dots-bar" style="height: 20px;">
+                                        <div class="grey-dot"></div>
+                                        <div class="grey-dot"></div>
+                                        <div class="grey-dot"></div>
+                                        <div class="grey-dot"></div>
+                                        <div class="grey-dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- show system message in video & audio -->
+                            <div v-if="systemMessage && !chatVisible" class="povc-sys-msg"
+                                :style="{'position' : 'absolute', 'bottom': chatVisible ? '83px' : '70px', 'color': systemMessageColor}">
+                                <div class="povc-sys-msg-content">
+                                    <div class="povc-warning-mark" :style="{ 'background-color': systemMessageColor}">
+                                        <img style="vertical-align: top; height: 16px; width: 16px;"
+                                            src="./images/svg/exclamation.svg" />
+                                    </div>
+                                    <p style="font-size:small; padding: 5px; margin-bottom: 0px;">{{ systemMessage }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="povc-video-controls" :style="{'height': chatVisible ? '83px' : '70px'}">
+                                <button class="povc-btn" id="toggleVideo" @click="toggleVideo">
+                                    <img style="width: 24px;" class="povc-filter-white"
+                                        :src="petOwnerVideoEnabled ? './images/svg/video-on.svg' : './images/svg/video-off.svg'" />
+                                </button>
+                                <button v-if="!audioOnly && petOwnerVideoEnabled && hasAnotherCamera" class="povc-btn"
+                                    id="switchCamera" @click="switchCamera">
+                                    <img style="width: 20px;" class="povc-filter-white"
+                                        src="./images/svg/camera-reverse.svg" />
+                                </button>
+                                <button class="povc-btn" id="toggleAudio" @click="toggleAudio">
+                                    <img style="height: 22px;" class="povc-filter-white"
+                                        :src="petOwnerAudioEnabled ? './images/svg/microphone-on.svg' : './images/svg/microphone-off.svg'" />
+                                </button>
+                                <button v-if="!chatVisible && chatConnected" class="povc-btn" id="attachInVideo"
+                                    @click="uploadClick">
+                                    <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
+                                </button>
+                                <button class="povc-btn" id="toggleChat" @click="toggleChat"
+                                    :style="{'position': 'relative'}">
+                                    <img style="width: 20px; padding-top: 2px;" class="povc-filter-white"
+                                        :src="chatVisible ? './images/svg/chat-close.svg' : './images/svg/chat.svg'" />
+                                    <img v-show="redDot" style="position: absolute; top: 2px; left: 18px; width: 20px;"
+                                        class="povc-filter-danger" src="./images/svg/dot-mark.svg" />
+                                </button>
+                            </div>
+
+                            <canvas v-show="false" ref="canvas" width="640" height="480"></canvas>
+                        </div>
+
+                        <!-- chat -->
+                        <div v-if="chatVisible" id="povc-chat-feed"
+                            :class="hasAudioVideo ? 'col povc-chat-feed-half' : 'col povc-chat-feed'">
+                            <div class="col" style="padding: 0px !important; height: calc(100% - 70px);">
+                                <div style="height: 100%; display: flex; flex-direction: column;">
+                                    <div id="messages" ref="messages" style="height: inherit; overflow-y: auto;">
+                                        <div class="well">
+                                            <div :style="{'display': 'grid', 'font-family': selectedFont}"
+                                                v-for="message in messages">
+                                                <span
+                                                    :class="message.author == userName ? 'povc-msg-pet-owner-time' : 'povc-msg-vet-time'">{{
+                                                    message.postTime }} <b>{{ message.author }}</b></span>
+                                                <div
+                                                    :class="message.author == userName ? 'povc-msg-pet-owner' : 'povc-msg-vet'">
+                                                    <p v-if="message.infoSheet" class="povc-msg-text"><a href="#"
+                                                            @click="openInfoSheet(message.infoSheet.fileId)">{{message.infoSheet.fileName}}</a>
+                                                    </p>
+                                                    <p v-else class="povc-msg-text">{{ message.message }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- show system message in chat -->
+                                    <div v-if="systemMessage" class="povc-sys-msg"
+                                        :style="{ 'color': systemMessageColor,}">
+                                        <div class="povc-sys-msg-content">
+                                            <div class="povc-warning-mark"
+                                                :style="{ 'background-color': systemMessageColor}">
+                                                <img style="vertical-align: top; height: 16px; width: 16px;"
+                                                    class="povc-filter-white" src="./images/svg/exclamation.svg" />
+                                            </div>
+                                            <p style="font-size: small; padding: 5px; margin-bottom: 0px;">{{
+                                                systemMessage }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="povc-chat-controls">
+                                <button class="povc-btn" id="attachInChat" @click="uploadClick"
+                                    :disabled="!chatConnected">
+                                    <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
+                                </button>
+                                <div style="width: calc(100% - 104px);">
+                                    <textarea rows="4" id="chatMessage" class="form-control" v-model="chatMessage"
+                                        placeholder="Type a message..."
+                                        style="border: none; font-size: small; max-height: 60px; width: 100%; margin-top: 5px; padding: 5px; resize: none;"
+                                        name="chatMessage" @keydown.enter.exact.prevent @keyup.enter.exact="sendMessage"
+                                        ref="messageArea" :disabled="!chatConnected"></textarea>
+                                </div>
+                                <button class="povc-btn" id="sendMessage" @click="sendMessage"
+                                    :disabled="!chatConnected">
+                                    <img style="height: 20px; padding-right: 2px;" class="povc-filter-white"
+                                        src="./images/svg/paperplane.svg" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="set-color-font">
+            <div>
+                <input type="color" id="primary" name="head" value="#000" />
+                <label for="head">Primary Color</label>
+            </div>
+
+            <div>
+                <input type="color" id="secondary" name="body" value="#333" />
+                <label for="body">Secondary Color</label>
+            </div>
+            <div>
+                <input type="color" id="bg" name="head" value="#f8f9fa" />
+                <label for="head">Background Color</label>
+            </div>
+
+            <div>
+                <input type="color" id="text-color" name="body" value="#fff" />
+                <label for="body">Text Color</label>
+            </div>
+            <div>
+                <select id="selectFontFamily" name="selectFontFamily" v-model="selectedFont">
+                    <option value="Serif"> Serif </option>
+                    <option value="Sans-Serif"> Sans-Serif </option>
+                    <option value="Tahoma"> Tahoma </option>
+                    <option value="Verdana"> Verdana </option>
+                    <option value="Lucida Sans Unicode"> Lucida Sans Unicode </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    videoChatEnabled: true,
+                    getTitle: 'AudioVideoChat',
+                    closeConnectionMessage: '',
+                    inviteMessage: '',
+                    chatVisible: true,
+                    audioOnly: false,
+                    hasAudioVideo: true,
+                    mediaStarted: true,
+                    chatConnected: true,
+                    systemMessage: 'System Message!',
+                    systemMessageColor: 'red',
+                    petOwnerVideoEnabled: false,
+                    hasAnotherCamera: false,
+                    petOwnerAudioEnabled: true,
+                    redDot: true,
+                    messages: [
+                        { postTime: '09:30', author: 'client', message: 'Hi, ...' },
+                        { postTime: '09:36', author: 'vet', message: 'Hello' }
+                    ],
+                    userName: 'client',
+                    chatMessage: '',
+                    selectedFont: 'Serif'
+                }
+            },
+            methods: {
+                closeAudioVideoChat() {
+                    this.hasAudioVideo = !this.hasAudioVideo;
+                },
+                toggleVideo() {
+                    this.petOwnerVideoEnabled = !this.petOwnerVideoEnabled;
+                    if (this.petOwnerVideoEnabled) {
+                        this.audioOnly = false;
+                    } else {
+                        this.audioOnly = true;
+                    }
+                },
+                onChangeFilesToUpload() { },
+                switchCamera() { },
+                toggleAudio() {
+                    this.petOwnerAudioEnabled = !this.petOwnerAudioEnabled;
+                },
+                uploadClick() { },
+                toggleChat() {
+                    this.chatVisible = !this.chatVisible;
+                },
+                sendMessage() {
+                    if (this.chatMessage) {
+                        const lastMsg = this.messages[this.messages.length - 1];
+                        const newMin = +lastMsg.postTime.split(':')[1] + 1;
+                        this.messages.push({
+                            postTime: lastMsg.postTime.split(':')[0] + ':' + newMin,
+                            author: 'client',
+                            message: this.chatMessage
+                        });
+                    }
+                }
+            },
+            mounted() {
+
+            },
+            beforeDestroy() {
+
+            }
+
+        });
+    </script>
+</body>
+
+</html>
