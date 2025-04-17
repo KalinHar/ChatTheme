@@ -371,21 +371,29 @@
                 opacity: 1;
             }
         }
+
+        .col {
+            padding: 5px;
+        }
     </style>
 </head>
 
 <body>
     <style>
-        .povc-btn {
+        /* .povc-btn {
             background-color: #109526;
-        }
+        } */
     </style>
     <div id="app">
-        <div class="main-view" :style="{'font-family': selectedFont}">
-            <div v-if="videoChatEnabled" id="videoChatContainer" class="povc-container">
+        <div class="main-view" :style="{'font-family': theme.font}">
+            <!-- TO OVERWRITE -->
+            <div v-if="videoChatEnabled" id="videoChatContainer" class="povc-container"
+                :style="{'background-color': theme.primary, 'border-color': theme.primary}">
+                <!-- TO OVERWRITE -->
                 <div class="col" style="padding: 4px !important;">
                     <!-- header -->
-                    <div class="povc-header" id="video-chat-header">
+                    <div class="povc-header" :style="{'background-color': theme.primary, 'color': theme.text}" id="video-chat-header">
+                        <!-- TO OVERWRITE -->
                         <div class="povc-title">
                             {{ getTitle }}
                         </div>
@@ -482,25 +490,31 @@
                             </div>
 
                             <div class="povc-video-controls" :style="{'height': chatVisible ? '83px' : '70px'}">
-                                <button class="povc-btn" id="toggleVideo" @click="toggleVideo">
+                                <button class="povc-btn" id="toggleVideo" @click="toggleVideo"
+                                    :style="{'background-color': theme.primary, 'color': theme.text}">
+                                    <!-- TO OVERWRITE -->
                                     <img style="width: 24px;" class="povc-filter-white"
                                         :src="petOwnerVideoEnabled ? './images/svg/video-on.svg' : './images/svg/video-off.svg'" />
                                 </button>
                                 <button v-if="!audioOnly && petOwnerVideoEnabled && hasAnotherCamera" class="povc-btn"
-                                    id="switchCamera" @click="switchCamera">
+                                    :style="{'background-color': theme.primary, 'color': theme.text}" id="switchCamera" @click="switchCamera">
+                                    <!-- TO OVERWRITE -->
                                     <img style="width: 20px;" class="povc-filter-white"
                                         src="./images/svg/camera-reverse.svg" />
                                 </button>
-                                <button class="povc-btn" id="toggleAudio" @click="toggleAudio">
+                                <button class="povc-btn" id="toggleAudio" @click="toggleAudio" :style="{'background-color': theme.primary, 'color': theme.text}">
+                                    <!-- TO OVERWRITE -->
                                     <img style="height: 22px;" class="povc-filter-white"
                                         :src="petOwnerAudioEnabled ? './images/svg/microphone-on.svg' : './images/svg/microphone-off.svg'" />
                                 </button>
                                 <button v-if="!chatVisible && chatConnected" class="povc-btn" id="attachInVideo"
-                                    @click="uploadClick">
+                                    :style="{'background-color': theme.primary, 'color': theme.text}" @click="uploadClick">
+                                    <!-- TO OVERWRITE -->
                                     <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
                                 </button>
-                                <button class="povc-btn" id="toggleChat" @click="toggleChat"
-                                    :style="{'position': 'relative'}">
+                                <button class="povc-btn"
+                                    :style="{'position': 'relative', 'background-color': theme.primary, 'color': theme.text}" id="toggleChat" @click="toggleChat">
+                                    <!-- TO OVERWRITE -->
                                     <img style="width: 20px; padding-top: 2px;" class="povc-filter-white"
                                         :src="chatVisible ? './images/svg/chat-close.svg' : './images/svg/chat.svg'" />
                                     <img v-show="redDot" style="position: absolute; top: 2px; left: 18px; width: 20px;"
@@ -513,13 +527,14 @@
 
                         <!-- chat -->
                         <div v-if="chatVisible" id="povc-chat-feed"
-                            :class="hasAudioVideo ? 'col povc-chat-feed-half' : 'col povc-chat-feed'">
+                            :class="hasAudioVideo ? 'col povc-chat-feed-half' : 'col povc-chat-feed'"
+                            :style="{'background-color': theme.background}" id="video-chat-header">
+                            <!-- TO OVERWRITE -->
                             <div class="col" style="padding: 0px !important; height: calc(100% - 70px);">
                                 <div style="height: 100%; display: flex; flex-direction: column;">
                                     <div id="messages" ref="messages" style="height: inherit; overflow-y: auto;">
                                         <div class="well">
-                                            <div :style="{'display': 'grid'}"
-                                                v-for="message in messages">
+                                            <div :style="{'display': 'grid'}" v-for="message in messages">
                                                 <span
                                                     :class="message.author == userName ? 'povc-msg-pet-owner-time' : 'povc-msg-vet-time'">{{
                                                     message.postTime }} <b>{{ message.author }}</b></span>
@@ -548,9 +563,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="povc-chat-controls">
-                                <button class="povc-btn" id="attachInChat" @click="uploadClick"
-                                    :disabled="!chatConnected">
+                            <div class="povc-chat-controls" :style="{'background-color': theme.background}">
+                                <!-- TO OVERWRITE -->
+                                <button class="povc-btn"
+                                    :style="{'background-color': theme.primary, 'color': theme.text}" id="attachInChat" @click="uploadClick" :disabled="!chatConnected">
+                                    <!-- TO OVERWRITE -->
                                     <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
                                 </button>
                                 <div style="width: calc(100% - 104px);">
@@ -560,8 +577,8 @@
                                         name="chatMessage" @keydown.enter.exact.prevent @keyup.enter.exact="sendMessage"
                                         ref="messageArea" :disabled="!chatConnected"></textarea>
                                 </div>
-                                <button class="povc-btn" id="sendMessage" @click="sendMessage"
-                                    :disabled="!chatConnected">
+                                <button class="povc-btn" :style="{'background-color': theme.primary, 'color': theme.text}" id="sendMessage" @click="sendMessage" :disabled="!chatConnected">
+                                    <!-- TO OVERWRITE -->
                                     <img style="height: 20px; padding-right: 2px;" class="povc-filter-white"
                                         src="./images/svg/paperplane.svg" />
                                 </button>
@@ -572,36 +589,50 @@
             </div>
         </div>
         <div class="set-color-font">
-            <div>
-                <input type="color" id="primary" name="head" value="#000" />
+            <div class="col">
+                <input type="color" id="primary" name="head" v-model="theme.primary" />
                 <label for="head">Primary Color</label>
+                <label style="width: 180px;">{{theme.primary}}</label>
             </div>
-
-            <div>
-                <input type="color" id="secondary" name="body" value="#333" />
+            <div class="col">
+                <input type="color" id="secondary" name="body" v-model="theme.secondary" />
                 <label for="body">Secondary Color</label>
+                <label style="width: 180px;">{{theme.secondary}}</label>
             </div>
-            <div>
-                <input type="color" id="bg" name="head" value="#f8f9fa" />
+            <div class="col">
+                <input type="color" id="bg" name="head" v-model="theme.background" />
                 <label for="head">Background Color</label>
+                <label for="head" style="width: 185px;">{{theme.background}}</label>
             </div>
-
-            <div>
-                <input type="color" id="text-color" name="body" value="#fff" />
+            <div class="col">
+                <input type="color" id="text-color" name="body" v-model="theme.text" />
                 <label for="body">Text Color</label>
+                <label for="body" style="width: 160px;">{{theme.text}}</label>
+
             </div>
-            <div>
-                <select id="selectFontFamily" name="selectFontFamily" v-model="selectedFont">
+            <div class="col">
+                <select id="selectFontFamily" name="selectFontFamily" v-model="theme.font">
                     <option value="Arial"> Arial </option>
                     <option value="Serif"> Serif </option>
                     <option value="Roboto"> Roboto </option>
                     <option value="Gotic"> Gothic </option>
-                    <option value="Special Gotic"> Special Gothic </option>
                     <option value="Sans-Serif"> Sans-Serif </option>
                     <option value="Tahoma"> Tahoma </option>
                     <option value="Verdana"> Verdana </option>
                     <option value="Lucida Sans Unicode"> Lucida Sans Unicode </option>
                 </select>
+            </div>
+            <div class="col">
+                <select id="predefinedTheme" name="predefinedTheme" v-model="selectedTheme" @change="setTheme">
+                    <option value=""> Predefined Themes </option>
+                    <option value="Orange"> Orange </option>
+                    <option value="Blue"> Blue </option>
+                    <option value="Dark"> Dark </option>
+                    <option value="Light"> Light </option>
+                    <option value="Red"> Red </option>
+                    <option value="Green"> Green </option>
+                </select>
+                <button @click="toClipboard">Theme to clipboard</button>
             </div>
         </div>
     </div>
@@ -632,7 +663,21 @@
                     ],
                     userName: 'client',
                     chatMessage: '',
-                    selectedFont: 'Serif'
+                    selectedTheme: '',
+                    darkTheme: {
+                        primary: '#000000',
+                        secondary: '#f2f2f2',
+                        background: '#f8f9fa',
+                        text: '#ffffff',
+                        font: 'Arial',
+                    },
+                    theme: {
+                        primary: '#000000',
+                        secondary: '#f2f2f2',
+                        background: '#f8f9fa',
+                        text: '#ffffff',
+                        font: 'Arial',
+                    }
                 }
             },
             methods: {
@@ -666,15 +711,34 @@
                             message: this.chatMessage
                         });
                     }
+                },
+                setTheme() {
+                    switch (this.selectedTheme) {
+                        case 'Orange':
+                            console.log('Orange');
+                            break;
+                        case 'Blue':
+                            console.log('Blue');
+                            break;
+                        case 'Dark':
+                            Object.assign(this.theme, this.darkTheme);
+                            break;
+                        case 'Light':
+                            console.log('Light');
+                            break;
+                        case 'Red':
+                            console.log('Red');
+                            break;
+                        case 'Green':
+                            console.log('Green');
+                            break;
+                    }
+                },
+                toClipboard() {
+                    navigator.clipboard.writeText(JSON.stringify(this.theme));
+                    alert("Copied: " + JSON.stringify(this.theme));
                 }
-            },
-            mounted() {
-
-            },
-            beforeDestroy() {
-
             }
-
         });
     </script>
 </body>
