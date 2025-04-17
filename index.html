@@ -443,7 +443,8 @@
                     <div :class="!chatVisible && !audioOnly ? 'povc-feed hidden-chat-in-video' : 'povc-feed'">
                         <!-- video & audio -->
                         <div v-if="hasAudioVideo" id="video-feed" class="col povc-video-feed">
-                            <div v-if="audioOnly" class="povc-video-feed-content" style=" background-color: #414143;">
+                            <div v-if="audioOnly" class="povc-video-feed-content" style=" background-color: #414143;" :style="{'background-color': theme.secondary}">
+                                <!-- TO OVERWRITE -->
                                 <div id="video" class="embed-responsive-item" style="height: max-content;">
                                     <div style="margin: 0 auto; width: 50%;">
                                         <div style="display: flex; flex-direction: column; height: inherit;">
@@ -461,7 +462,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-show="!audioOnly" class="povc-video-feed-content">
+                            <div v-show="!audioOnly" class="povc-video-feed-content" :style="{'background-color': theme.secondary}">
+                                <!-- TO OVERWRITE -->
                                 <div class="embed-responsive embed-responsive-4by3" style="height:100%">
                                     <div id="video" ref="video" class="embed-responsive-item">
                                     </div>
@@ -563,7 +565,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="povc-chat-controls" :style="{'background-color': theme.background}">
+                            <div class="povc-chat-controls" :style="{'background-color': theme.secondary}">
                                 <!-- TO OVERWRITE -->
                                 <button class="povc-btn"
                                     :style="{'background-color': theme.primary, 'color': theme.text}" id="attachInChat" @click="uploadClick" :disabled="!chatConnected">
@@ -666,14 +668,19 @@
                     selectedTheme: '',
                     darkTheme: {
                         primary: '#000000',
-                        secondary: '#f2f2f2',
+                        secondary: '#414143',
                         background: '#f8f9fa',
                         text: '#ffffff',
                         font: 'Arial',
                     },
+                    lightTheme: {primary:"#cce0ef",secondary:"#d1d6d6",background:"#f8f9fa",text:"#838e91",font:"Arial"},
+                    redTheme: {primary:"#c80459",secondary:"#e2d0ec",background:"#f7d4e3",text:"#283133",font:"Arial"},
+                    greenTheme: {"primary":"#05851e","secondary":"#a2c299","background":"#c1e1cb","text":"#d8e8d4","font":"Tahoma"},
+                    blueTheme: {"primary":"#054d85","secondary":"#abc3c9","background":"#e2f2f3","text":"#e7eef3","font":"Arial"},
+                    orangeTheme: {"primary":"#e07c52","secondary":"#dbdcd6","background":"#f3e7dd","text":"#f6f3ee","font":"Arial"},
                     theme: {
                         primary: '#000000',
-                        secondary: '#f2f2f2',
+                        secondary: '#414143',
                         background: '#f8f9fa',
                         text: '#ffffff',
                         font: 'Arial',
@@ -715,22 +722,22 @@
                 setTheme() {
                     switch (this.selectedTheme) {
                         case 'Orange':
-                            console.log('Orange');
+                            Object.assign(this.theme, this.orangeTheme);
                             break;
                         case 'Blue':
-                            console.log('Blue');
+                            Object.assign(this.theme, this.blueTheme);
                             break;
                         case 'Dark':
                             Object.assign(this.theme, this.darkTheme);
                             break;
                         case 'Light':
-                            console.log('Light');
+                            Object.assign(this.theme, this.lightTheme);
                             break;
                         case 'Red':
-                            console.log('Red');
+                            Object.assign(this.theme, this.redTheme);
                             break;
                         case 'Green':
-                            console.log('Green');
+                            Object.assign(this.theme, this.greenTheme);
                             break;
                     }
                 },
