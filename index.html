@@ -411,12 +411,14 @@
                     <!-- close modal -->
                     <div v-if="closeConnectionMessage" class="povc-mask">
                         <div class="povc-modal">
-                            <div class="povc-modal-msg">
+                            <!-- TO OVERWRITE -->
+                            <div class="povc-modal-msg" :style="{'color': theme.primary}">
                                 {{ closeConnectionMessage }}
                             </div>
                             <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
-                                <button class="povc-modal-btn" @click="confirmClose">Yes</button>
-                                <button class="povc-modal-btn" @click="cancelClose">No</button>
+                                <!-- TO OVERWRITE -->
+                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmClose">Yes</button>
+                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmClose">No</button>
                             </div>
                         </div>
                     </div>
@@ -424,12 +426,14 @@
                     <!-- invite confirmation modal -->
                     <div v-if="inviteMessage" class="povc-mask">
                         <div class="povc-modal">
-                            <div class="povc-modal-msg">
+                            <!-- TO OVERWRITE -->
+                            <div class="povc-modal-msg" :style="{'color': theme.primary}">
                                 {{ inviteMessage }}
                             </div>
                             <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
-                                <button class="povc-modal-btn" @click="confirmInvitation">Connect</button>
-                                <button class="povc-modal-btn" @click="rejectInvitation">Reject</button>
+                                <!-- TO OVERWRITE -->
+                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmInvitation">Connect</button>
+                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmInvitation">Reject</button>
                             </div>
                         </div>
                     </div>
@@ -495,7 +499,7 @@
                                 <button class="povc-btn" id="toggleVideo" @click="toggleVideo"
                                     :style="{'background-color': theme.primary, 'color': theme.text}">
                                     <!-- TO OVERWRITE -->
-                                    <img style="width: 24px;" class="povc-filter-white"
+                                    <img style="width: 24px;" class="povc-filter-white" :style="{'color': theme.text}"
                                         :src="petOwnerVideoEnabled ? './images/svg/video-on.svg' : './images/svg/video-off.svg'" />
                                 </button>
                                 <button v-if="!audioOnly && petOwnerVideoEnabled && hasAnotherCamera" class="povc-btn"
@@ -655,7 +659,7 @@
                     chatConnected: true,
                     systemMessage: 'System Message!',
                     systemMessageColor: 'red',
-                    petOwnerVideoEnabled: false,
+                    petOwnerVideoEnabled: true,
                     hasAnotherCamera: false,
                     petOwnerAudioEnabled: true,
                     redDot: true,
@@ -690,6 +694,9 @@
             methods: {
                 closeAudioVideoChat() {
                     this.hasAudioVideo = !this.hasAudioVideo;
+                    if (!this.hasAudioVideo) {
+                        this.closeConnectionMessage = 'Proceed to close connection.';
+                    }
                 },
                 toggleVideo() {
                     this.petOwnerVideoEnabled = !this.petOwnerVideoEnabled;
@@ -703,6 +710,9 @@
                 switchCamera() { },
                 toggleAudio() {
                     this.petOwnerAudioEnabled = !this.petOwnerAudioEnabled;
+                    if (!this.petOwnerAudioEnabled) {
+                        this.inviteMessage = 'Proceed to video connection!';
+                    }
                 },
                 uploadClick() { },
                 toggleChat() {
@@ -718,6 +728,12 @@
                             message: this.chatMessage
                         });
                     }
+                },
+                confirmClose() {
+                    this.closeConnectionMessage = '';
+                },
+                confirmInvitation() {
+                    this.inviteMessage = '';
                 },
                 setTheme() {
                     switch (this.selectedTheme) {
