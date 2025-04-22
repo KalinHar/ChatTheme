@@ -23,7 +23,7 @@
             background-color: ${theme.primary};
         }
         .povc-video-feed {
-            background-color: black;
+            background-color: ${theme.primary};
         }
         .povc-chat-feed {
             background-color: ${theme.background};
