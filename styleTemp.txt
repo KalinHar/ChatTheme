@@ -1,0 +1,36 @@
+        .main-view .editor-view {
+            position: relative;
+            height: 300px;
+            top: calc(50% - 150px);
+        }
+        .povc-container {
+            border-color: ${theme.primary};
+            background-color: ${theme.primary};
+            font-family: ${theme.font};
+        }
+        .povc-header {
+            background-color: ${theme.primary};
+            color: ${theme.text};
+        }
+        .povc-btn {
+            background-color: ${theme.primary};
+            color: ${theme.text};
+        }
+        .povc-modal-msg {
+            color: ${theme.primary};
+        }
+        .povc-modal-btn {
+            background-color: ${theme.primary};
+        }
+        .povc-video-feed {
+            background-color: black;
+        }
+        .povc-chat-feed {
+            background-color: ${theme.background};
+        }
+        .povc-chat-feed-half {
+            background-color: ${theme.background};
+        }
+        .povc-chat-controls {
+            background-color: white;
+        }
