@@ -379,21 +379,12 @@
 </head>
 
 <body>
-    <style>
-        /* .povc-btn {
-            background-color: #109526;
-        } */
-    </style>
     <div id="app">
-        <div class="main-view" :style="{'font-family': theme.font}">
-            <!-- TO OVERWRITE -->
-            <div v-if="videoChatEnabled" id="videoChatContainer" class="povc-container"
-                :style="{'background-color': theme.primary, 'border-color': theme.primary}">
-                <!-- TO OVERWRITE -->
+        <div class="main-view">
+            <div v-if="videoChatEnabled" id="videoChatContainer" class="povc-container">
                 <div class="col" style="padding: 4px !important;">
                     <!-- header -->
-                    <div class="povc-header" :style="{'background-color': theme.primary, 'color': theme.text}" id="video-chat-header">
-                        <!-- TO OVERWRITE -->
+                    <div class="povc-header" id="video-chat-header">
                         <div class="povc-title">
                             {{ getTitle }}
                         </div>
@@ -407,48 +398,40 @@
                             </button>
                         </div>
                     </div>
-
                     <!-- close modal -->
                     <div v-if="closeConnectionMessage" class="povc-mask">
                         <div class="povc-modal">
-                            <!-- TO OVERWRITE -->
-                            <div class="povc-modal-msg" :style="{'color': theme.primary}">
+                            <div class="povc-modal-msg">
                                 {{ closeConnectionMessage }}
                             </div>
                             <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
-                                <!-- TO OVERWRITE -->
-                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmClose">Yes</button>
-                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmClose">No</button>
+                                
+                                <button class="povc-modal-btn" @click="confirmClose">Yes</button>
+                                <button class="povc-modal-btn" @click="confirmClose">No</button>
                             </div>
                         </div>
                     </div>
-
                     <!-- invite confirmation modal -->
                     <div v-if="inviteMessage" class="povc-mask">
                         <div class="povc-modal">
-                            <!-- TO OVERWRITE -->
-                            <div class="povc-modal-msg" :style="{'color': theme.primary}">
+                            <div class="povc-modal-msg">
                                 {{ inviteMessage }}
                             </div>
                             <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
-                                <!-- TO OVERWRITE -->
-                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmInvitation">Connect</button>
-                                <button class="povc-modal-btn" :style="{'background-color': theme.primary}" @click="confirmInvitation">Reject</button>
+                                <button class="povc-modal-btn" @click="confirmInvitation">Connect</button>
+                                <button class="povc-modal-btn" @click="confirmInvitation">Reject</button>
                             </div>
                         </div>
                     </div>
-
                     <!-- upload form -->
                     <form method="post" style="margin-block-end: 0">
                         <input type="file" id="filesToUpload" name="filesToUpload" style="display: none;"
                             accept="image/*,video/*,application/pdf" multiple @change="onChangeFilesToUpload">
                     </form>
-
                     <div :class="!chatVisible && !audioOnly ? 'povc-feed hidden-chat-in-video' : 'povc-feed'">
                         <!-- video & audio -->
                         <div v-if="hasAudioVideo" id="video-feed" class="col povc-video-feed">
-                            <div v-if="audioOnly" class="povc-video-feed-content" style=" background-color: #414143;" :style="{'background-color': theme.secondary}">
-                                <!-- TO OVERWRITE -->
+                            <div v-if="audioOnly" class="povc-video-feed-content" style=" background-color: #414143;">
                                 <div id="video" class="embed-responsive-item" style="height: max-content;">
                                     <div style="margin: 0 auto; width: 50%;">
                                         <div style="display: flex; flex-direction: column; height: inherit;">
@@ -466,8 +449,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-show="!audioOnly" class="povc-video-feed-content" :style="{'background-color': theme.secondary}">
-                                <!-- TO OVERWRITE -->
+                            <div v-show="!audioOnly" class="povc-video-feed-content">
                                 <div class="embed-responsive embed-responsive-4by3" style="height:100%">
                                     <div id="video" ref="video" class="embed-responsive-item">
                                     </div>
@@ -494,48 +476,35 @@
                                     </p>
                                 </div>
                             </div>
-
                             <div class="povc-video-controls" :style="{'height': chatVisible ? '83px' : '70px'}">
-                                <button class="povc-btn" id="toggleVideo" @click="toggleVideo"
-                                    :style="{'background-color': theme.primary, 'color': theme.text}">
-                                    <!-- TO OVERWRITE -->
-                                    <img style="width: 24px;" class="povc-filter-white" :style="{'color': theme.text}"
+                                <button class="povc-btn" id="toggleVideo" @click="toggleVideo">
+                                    <img style="width: 24px;" class="povc-filter-white"
                                         :src="petOwnerVideoEnabled ? './images/svg/video-on.svg' : './images/svg/video-off.svg'" />
                                 </button>
                                 <button v-if="!audioOnly && petOwnerVideoEnabled && hasAnotherCamera" class="povc-btn"
-                                    :style="{'background-color': theme.primary, 'color': theme.text}" id="switchCamera" @click="switchCamera">
-                                    <!-- TO OVERWRITE -->
+                                    id="switchCamera" @click="switchCamera">
                                     <img style="width: 20px;" class="povc-filter-white"
                                         src="./images/svg/camera-reverse.svg" />
                                 </button>
-                                <button class="povc-btn" id="toggleAudio" @click="toggleAudio" :style="{'background-color': theme.primary, 'color': theme.text}">
-                                    <!-- TO OVERWRITE -->
+                                <button class="povc-btn" id="toggleAudio" @click="toggleAudio">
                                     <img style="height: 22px;" class="povc-filter-white"
                                         :src="petOwnerAudioEnabled ? './images/svg/microphone-on.svg' : './images/svg/microphone-off.svg'" />
                                 </button>
-                                <button v-if="!chatVisible && chatConnected" class="povc-btn" id="attachInVideo"
-                                    :style="{'background-color': theme.primary, 'color': theme.text}" @click="uploadClick">
-                                    <!-- TO OVERWRITE -->
+                                <button v-if="!chatVisible && chatConnected" class="povc-btn" id="attachInVideo" @click="uploadClick">
                                     <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
                                 </button>
-                                <button class="povc-btn"
-                                    :style="{'position': 'relative', 'background-color': theme.primary, 'color': theme.text}" id="toggleChat" @click="toggleChat">
-                                    <!-- TO OVERWRITE -->
+                                <button class="povc-btn" id="toggleChat" @click="toggleChat">
                                     <img style="width: 20px; padding-top: 2px;" class="povc-filter-white"
                                         :src="chatVisible ? './images/svg/chat-close.svg' : './images/svg/chat.svg'" />
-                                    <img v-show="redDot" style="position: absolute; top: 2px; left: 18px; width: 20px;"
-                                        class="povc-filter-danger" src="./images/svg/dot-mark.svg" />
+                                    <!-- <img v-show="redDot" style="position: relative; top: -20px; left: 18px; width: 20px;"
+                                        class="povc-filter-danger" src="./images/svg/dot-mark.svg" /> -->
                                 </button>
                             </div>
-
                             <canvas v-show="false" ref="canvas" width="640" height="480"></canvas>
                         </div>
-
                         <!-- chat -->
                         <div v-if="chatVisible" id="povc-chat-feed"
-                            :class="hasAudioVideo ? 'col povc-chat-feed-half' : 'col povc-chat-feed'"
-                            :style="{'background-color': theme.background}" id="video-chat-header">
-                            <!-- TO OVERWRITE -->
+                            :class="hasAudioVideo ? 'col povc-chat-feed-half' : 'col povc-chat-feed'" id="video-chat-header">
                             <div class="col" style="padding: 0px !important; height: calc(100% - 70px);">
                                 <div style="height: 100%; display: flex; flex-direction: column;">
                                     <div id="messages" ref="messages" style="height: inherit; overflow-y: auto;">
@@ -569,11 +538,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="povc-chat-controls" :style="{'background-color': theme.secondary}">
-                                <!-- TO OVERWRITE -->
-                                <button class="povc-btn"
-                                    :style="{'background-color': theme.primary, 'color': theme.text}" id="attachInChat" @click="uploadClick" :disabled="!chatConnected">
-                                    <!-- TO OVERWRITE -->
+                            <div class="povc-chat-controls">
+                                <button class="povc-btn" id="attachInChat" @click="uploadClick" :disabled="!chatConnected">
                                     <img style="width: 26px;" class="povc-filter-white" src="./images/svg/attach.svg" />
                                 </button>
                                 <div style="width: calc(100% - 104px);">
@@ -583,8 +549,7 @@
                                         name="chatMessage" @keydown.enter.exact.prevent @keyup.enter.exact="sendMessage"
                                         ref="messageArea" :disabled="!chatConnected"></textarea>
                                 </div>
-                                <button class="povc-btn" :style="{'background-color': theme.primary, 'color': theme.text}" id="sendMessage" @click="sendMessage" :disabled="!chatConnected">
-                                    <!-- TO OVERWRITE -->
+                                <button class="povc-btn" id="sendMessage" @click="sendMessage" :disabled="!chatConnected">
                                     <img style="height: 20px; padding-right: 2px;" class="povc-filter-white"
                                         src="./images/svg/paperplane.svg" />
                                 </button>
@@ -614,7 +579,6 @@
                 <input type="color" id="text-color" name="body" v-model="theme.text" />
                 <label for="body">Text Color</label>
                 <label for="body" style="width: 160px;">{{theme.text}}</label>
-
             </div>
             <div class="col">
                 <select id="selectFontFamily" name="selectFontFamily" v-model="theme.font">
@@ -630,7 +594,7 @@
             </div>
             <div class="col">
                 <select id="predefinedTheme" name="predefinedTheme" v-model="selectedTheme" @change="setTheme">
-                    <option value=""> Predefined Themes </option>
+                    <option value="Custom"> Custom Theme </option>
                     <option value="Orange"> Orange </option>
                     <option value="Blue"> Blue </option>
                     <option value="Dark"> Dark </option>
@@ -663,33 +627,46 @@
                     hasAnotherCamera: false,
                     petOwnerAudioEnabled: true,
                     redDot: true,
-                    messages: [
-                        { postTime: '09:30', author: 'client', message: 'Hi, ...' },
-                        { postTime: '09:36', author: 'vet', message: 'Hello' }
-                    ],
                     userName: 'client',
                     chatMessage: '',
-                    selectedTheme: '',
-                    darkTheme: {
+                    selectedTheme: 'Dark',
+                    theme: {
                         primary: '#000000',
-                        secondary: '#414143',
+                        secondary: '#000000',
                         background: '#f8f9fa',
                         text: '#ffffff',
                         font: 'Arial',
                     },
-                    lightTheme: {primary:"#cce0ef",secondary:"#d1d6d6",background:"#f8f9fa",text:"#838e91",font:"Arial"},
-                    redTheme: {primary:"#c80459",secondary:"#e2d0ec",background:"#f7d4e3",text:"#283133",font:"Arial"},
-                    greenTheme: {"primary":"#05851e","secondary":"#a2c299","background":"#c1e1cb","text":"#d8e8d4","font":"Tahoma"},
-                    blueTheme: {"primary":"#054d85","secondary":"#abc3c9","background":"#e2f2f3","text":"#e7eef3","font":"Arial"},
-                    orangeTheme: {"primary":"#e07c52","secondary":"#dbdcd6","background":"#f3e7dd","text":"#f6f3ee","font":"Arial"},
-                    theme: {
-                        primary: '#000000',
-                        secondary: '#414143',
-                        background: '#f8f9fa',
-                        text: '#ffffff',
-                        font: 'Arial',
-                    }
+                    style: null,
+                    isTheme: false,
+
+                    messages: [
+                        { postTime: '09:30', author: 'client', message: 'Hi, ...' },
+                        { postTime: '09:36', author: 'vet', message: 'Hello' }
+                    ],
+                    darkTheme: {primary: '#000000', secondary: '#000000', background: '#f8f9fa', text: '#ffffff', font: 'Arial'},
+                    lightTheme: {primary:"#cce0ef", secondary:"#cce0ef" ,background:"#f8f9fa" ,text:"#838e91" ,font:"Arial"},
+                    redTheme: {primary:"#aa0919", secondary:"#986177" ,background:"#f7d4e3" ,text:"#eae1e8" ,font:"Roboto"},
+                    greenTheme: {primary:"#05851e", secondary:"#67bf4f" ,background:"#c1e1cb" ,text:"#d8e8d4" ,font:"Tahoma"},
+                    blueTheme: {primary:"#054d85" ,secondary:"#47c2e1" ,background:"#e2f2f3" ,text:"#e7eef3" ,font:"Verdana"},
+                    orangeTheme: {primary:"#f08228" ,secondary:"#b2441f" ,background:"#f3e7dd" ,text:"#f6f3ee" ,font:"Arial"}
                 }
+            },
+            watch: {
+                theme: {
+                    handler: function (val, oldVal) {
+                        if (!this.isTheme) {
+                            this.selectedTheme = 'Custom';
+                        }
+                        this.setStyle(this.theme);
+                        this.isTheme = false;
+                    },
+                    deep: true
+                }
+            },
+            mounted() {
+                this.style = document.createElement('style');
+                document.head.appendChild(this.style);
             },
             methods: {
                 closeAudioVideoChat() {
@@ -728,6 +705,7 @@
                             message: this.chatMessage
                         });
                     }
+                    this.chatMessage = '';
                 },
                 confirmClose() {
                     this.closeConnectionMessage = '';
@@ -739,27 +717,72 @@
                     switch (this.selectedTheme) {
                         case 'Orange':
                             Object.assign(this.theme, this.orangeTheme);
+                            this.isTheme = true;
                             break;
                         case 'Blue':
                             Object.assign(this.theme, this.blueTheme);
+                            this.isTheme = true;
                             break;
                         case 'Dark':
                             Object.assign(this.theme, this.darkTheme);
+                            this.isTheme = true;
                             break;
                         case 'Light':
                             Object.assign(this.theme, this.lightTheme);
+                            this.isTheme = true;
                             break;
                         case 'Red':
                             Object.assign(this.theme, this.redTheme);
+                            this.isTheme = true;
                             break;
                         case 'Green':
                             Object.assign(this.theme, this.greenTheme);
+                            this.isTheme = true;
                             break;
                     }
                 },
                 toClipboard() {
                     navigator.clipboard.writeText(JSON.stringify(this.theme));
                     alert("Copied: " + JSON.stringify(this.theme));
+                },
+                setStyle(theme) {
+                    this.style.innerHTML = `
+                    .main-view .editor-view {
+                        position: relative;
+                        height: 300px;
+                        top: calc(50% - 150px);
+                    }
+                    .povc-container {
+                        border-color: ${theme.primary};
+                        background-color: ${theme.primary};
+                        font-family: ${theme.font};
+                    }
+                    .povc-header {
+                        background-color: ${theme.primary};
+                        color: ${theme.text};
+                    }
+                    .povc-btn {
+                        background-color: ${theme.secondary};
+                        color: ${theme.text};
+                    }
+                    .povc-modal-msg {
+                        color: ${theme.primary};
+                    }
+                    .povc-modal-btn {
+                        background-color: ${theme.primary};
+                    }
+                    .povc-video-feed {
+                        background-color: black;
+                    }
+                    .povc-chat-feed {
+                        background-color: ${theme.background};
+                    }
+                    .povc-chat-feed-half {
+                        background-color: ${theme.background};
+                    }
+                    .povc-chat-controls {
+                        background-color: white;
+                    }`
                 }
             }
         });
